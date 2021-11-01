@@ -9,12 +9,12 @@ class ServiceContainerTestController extends Controller
         /* サービスコンテナapp は、いろいろな機能を持ったサービスクラスを格納している */
 
         /* シンプルなサービスを追加してみる */
-        app()->bind('mySampleService1', function () {
-            return 'this is mySampleService1';
+        app()->bind('mySampleService', function () {
+            return 'this is mySampleService';
         });
 
         /* サービスを変数に取り出す */
-        $service_obj = app()->make('mySampleService1');
+        $service_obj = app()->make('mySampleService');
 
         dd($service_obj, app());
     }
