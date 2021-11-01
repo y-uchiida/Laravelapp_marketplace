@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 /* コントローラーへの参照を追加 */
 use App\Http\Controllers\BladeComponentSampleController;
 use App\Http\Controllers\ServiceContainerTestController;
+use App\Http\Controllers\ServiceProviderSampleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,5 +33,9 @@ Route::get('/sample-component2', [BladeComponentSampleController::class, 'showSa
 /* サービスコンテナの動作テスト */
 Route::get('/show_servicecontainer', [ServiceContainerTestController::class, 'showServiceContainer']);
 Route::get('/DI_test', [ServiceContainerTestController::class, 'DI_test']);
+
+/* サービスプロバイダの動作テスト */
+Route::get('ServiceProviderSample', [ServiceProviderSampleController::class, 'ServiceProviderSample']);
+Route::get('add_serviceProviderSample', [ServiceProviderSampleController::class, 'add_serviceProviderSample']);
 
 require __DIR__.'/auth.php';
