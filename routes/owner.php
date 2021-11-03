@@ -1,14 +1,27 @@
 <?php
 
-use App\Http\Controllers\User\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\User\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\User\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\User\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\User\Auth\NewPasswordController;
-use App\Http\Controllers\User\Auth\PasswordResetLinkController;
-use App\Http\Controllers\User\Auth\RegisteredUserController;
-use App\Http\Controllers\User\Auth\VerifyEmailController;
+/* Owner 用の認証情報を設定するファイル
+ * web.php と、そこからrequire されるauth.phpをベースに作成
+ */
+
+/* コントローラーへの参照を追加 */
+use App\Http\Controllers\Owner\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Owner\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Owner\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Owner\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Owner\Auth\NewPasswordController;
+use App\Http\Controllers\Owner\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Owner\Auth\RegisteredUserController;
+use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')
@@ -62,3 +75,4 @@ Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('logout');
+
