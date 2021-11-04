@@ -34,6 +34,7 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    /* 認証を試行するアクセスを処理する */
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -43,9 +44,21 @@ class LoginRequest extends FormRequest
      */
     public function authenticate()
     {
+        /* 認証要求が規定値を超えて大量に来た場合は処理しない */
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        /* アクセスされたURLによって、ガード情報(セッション上で参照するキー)を切り替える */
+        if ($this->routeIs('owner.*')){
+            $guard = 'owners';
+        }  else if ($this->routeIs('admin.*')){
+            $guard = 'admin';
+        } else {
+            $guard = 'users';
+        }
+
+        // if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        /* ここで謎のエラーが出る */
+        if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->filled('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

@@ -18,13 +18,15 @@ use App\Http\Controllers\ServiceProviderSampleController;
 |
 */
 
+/* users ガードで認証するべきものは、すべて'user'のプレフィックスをつけておく */
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('user.welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    return view('user.dashboard');
+})->middleware(['auth:users'])->name('dashboard');
 
 /* Blade コンポーネントの動作テスト */
 Route::get('/sample-component1', [BladeComponentSampleController::class, 'showSampleComponent1']);

@@ -18,7 +18,14 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+
+            @if(auth('admin')) {{-- admin ユーザーの時、admin用のナビゲーションを読み込む --}}
+                @include('layouts.admin-navigation')
+            @elseif(auth('owners')) {{-- owner ユーザーの時 --}}
+                @include('layouts.owner-navigation')
+            @elseif(auth('user')) {{-- user のとき --}}
+                @include('layouts.user-navigation')
+            @endif
 
             <!-- Page Heading -->
             <header class="bg-white shadow">
