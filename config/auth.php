@@ -13,8 +13,9 @@ return [
     |
     */
 
+    /* デフォルトの設定... webの user 認証を利用する */
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'users',
         'passwords' => 'users',
     ],
 
@@ -40,6 +41,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        /* users, owners, admin をそれぞれ追加する */
+        'users' => [ 'driver' => 'session', 'provider' => 'users',],
+        'owners' => [ 'driver' => 'session', 'provider' => 'owners', ],
+        'admin' => [ 'driver' => 'session', 'provider' => 'admin', ],
     ],
 
     /*
@@ -63,6 +69,16 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'owners' => [ /* Owner モデル用に追加 */
+            'driver' => 'eloquent',
+            'model' => App\Models\Owner::class,
+        ],
+
+        'admin' => [ /* Admin モデル用に追加 */
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
         ],
 
         // 'users' => [
@@ -90,6 +106,20 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'owners' => [
+            'provider' => 'owners',
+            'table' => 'owner_password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'admin' => [
+            'provider' => 'admin',
+            'table' => 'admin_password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],
