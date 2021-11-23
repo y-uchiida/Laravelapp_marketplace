@@ -58,18 +58,21 @@ class RouteServiceProvider extends ServiceProvider
             /* user 用の設定 */
             Route::prefix('/')
             ->as('user.') /* user. の名前を付けておき、ほかの認証種別と見分けをつけられるようにする */
+            ->middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/web.php'));
 
             /* owner 用の設定 */
             Route::prefix('owner')
-            ->as('owner.') /* user. の名前を付けておき、ほかの認証種別と見分けをつけられるようにする */
+            ->as('owner.') /* owner. の名前を付けておき、ほかの認証種別と見分けをつけられるようにする */
+            ->middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/owner.php'));
 
             /* admin 用の設定 */
             Route::prefix('admin')
             ->as('admin.') /* admin. の名前を付けておき、ほかの認証種別と見分けをつけられるようにする */
+            ->middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/admin.php'));
         });
