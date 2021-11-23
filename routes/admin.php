@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
+
+use App\Http\Controllers\Admin\OwnersController;
 use Illuminate\Support\Facades\Route;
 
 /* admin ガードで認証するべきものは、すべて'admin'のプレフィックスをつけておく */
@@ -25,9 +27,12 @@ Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth:admin'])->name('dashboard');
 
+/* --- Owner モデルに対する操作(リソースコントローラ)へのルーティング --- */
+Route::resource('owners', OwnersController::class)->middleware('auth:admin');
+
+/* --- 認証設定に関するルーティング --- */
 Route::get('/register', [RegisteredUserController::class, 'create'])
-                ->middleware('guest')
-                ->name('register');
+    ->middleware('guest')->name('register');
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
                 ->middleware('guest');

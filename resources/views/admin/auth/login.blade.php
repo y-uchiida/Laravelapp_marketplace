@@ -1,6 +1,6 @@
 <x-guest-layout>
     <x-auth-card>
-        Auth Login
+        Admin Login
         <x-slot name="logo">
             <a href="/">
                 <div class="w-32">
