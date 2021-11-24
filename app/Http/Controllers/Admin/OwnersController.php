@@ -151,7 +151,7 @@ class OwnersController extends Controller
     public function expiredOwnerIndex(){
         /* onlyTrashed() で、ソフトデリートされた(deleted_at に値が入っている)レコードに絞り込みする */
         $expiredOwners = Owner::onlyTrashed()->get();
-        return view('admin.expired-owners', compact('expiredOwners'));
+        return view('admin.owners.expired-owners', compact('expiredOwners'));
     }
 
     /* 期限切れオーナーを、物理削除する */

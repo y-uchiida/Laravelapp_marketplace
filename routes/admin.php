@@ -16,18 +16,21 @@ use App\Http\Controllers\Admin\Auth\VerifyEmailController;
 use App\Http\Controllers\Admin\OwnersController;
 use Illuminate\Support\Facades\Route;
 
-/* admin ガードで認証するべきものは、すべて'admin'のプレフィックスをつけておく */
 
-Route::get('/', function () {
-    return view('admin.welcome');
-});
+/* --- 管理者画面ではwelcomeを利用しないので、コメントアウト --- */
+// Route::get('/', function () {
+//     return view('admin.welcome');
+// });
+
+/* admin ガードで認証するべきものは、すべて'admin'のプレフィックスをつけておく */
 
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth:admin'])->name('dashboard');
 
 /* --- Owner モデルに対する操作(リソースコントローラ)へのルーティング --- */
-Route::resource('owners', OwnersController::class)->middleware('auth:admin');
+/* --- Ownerの機能では、詳細表示の画面は利用しない(editだけで済ませる)ので、showアクションはexcept しておく --- */
+Route::resource('owners', OwnersController::class)->middleware('auth:admin')->except(['show']);
 
 /* --- 期限切れオーナー(ソフトデリート済みレコード)に対する操作 --- */
 /* --- prefix() でルーティング設定に名前の接頭辞をつけて、ルーティング名設定の衝突を避ける --- */
