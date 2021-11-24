@@ -1,8 +1,9 @@
 @props(['status' => 'info'])
 
 @php
-if($status === 'info'){$bgColor = 'bg-blue-300';}
-if($status === 'error'){$bgColor = 'bg-red-500';}
+/* with() メソッドで、statusキーにフラッシュメッセージの種別を入れているのでそれによって見映えを変える */
+if(session('status') === 'info'){$bgColor = 'bg-blue-300';}
+if(session('status') === 'alert'){$bgColor = 'bg-red-500';}
 @endphp
 
 @if(session('message'))

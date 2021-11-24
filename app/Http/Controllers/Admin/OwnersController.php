@@ -63,7 +63,10 @@ class OwnersController extends Controller
 
         return redirect()
             ->route('admin.owners.index')
-            ->with('message', "オーナー {$request->name} を新規登録しました");
+            ->with([
+                'status' => 'info',
+                'message' => "オーナー {$request->name} を新規登録しました"
+            ]);
     }
 
     /**
@@ -117,7 +120,10 @@ class OwnersController extends Controller
 
         return redirect()
         ->route('admin.owners.index')
-        ->with('message', 'オーナー情報を更新しました');
+        ->with([
+            'status' => 'info',
+            'message' => 'オーナー情報を更新しました',
+        ]);
     }
 
     /**
@@ -128,6 +134,30 @@ class OwnersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        /* 指定のidでオブジェクトを取得し、それを削除する */
+        $owner = Owner::findOrFail($id);
+        $owner_name = $owner->name;
+        $owner->delete();
+
+        return redirect()
+        ->route('admin.owners.index')
+        ->with([
+            'status' => 'alert',
+            'message' => "オーナー {$owner_name} を削除しました"
+        ]);
+    }
+
+    /* 期限切れオーナー情報を一覧表示する */
+    public function expiredOwnerIndex(){
+        /* onlyTrashed() で、ソフトデリートされた(deleted_at に値が入っている)レコードに絞り込みする */
+        $expiredOwners = Owner::onlyTrashed()->get();
+        return view('admin.expired-owners', compact('expiredOwners'));
+    }
+
+    /* 期限切れオーナーを、物理削除する */
+    public function expiredOwnerDestroy($id){
+        /* onlyTrashed()のチェインでfindOrFail() を記述するとソフトデリートされたレコードを対象にデータを取得できる */
+        Owner::onlyTrashed()->findOrFail($id)->forceDelete();
+        return redirect()->route('admin.expired-owners.index');
     }
 }
