@@ -25,8 +25,8 @@ class OwnersController extends Controller
      */
     public function index()
     {
-        /* 一覧表示するものだけをselect()で指定して取得 */
-        $owners = Owner::select('id', 'name', 'email', 'created_at')->get();
+        /* 一覧表示するカラムだけをselect()で指定し、paginate()でページネーション取得 */
+        $owners = Owner::select('id', 'name', 'email', 'created_at')->paginate(3);
         return view('admin.owners.index', compact('owners'));
     }
 

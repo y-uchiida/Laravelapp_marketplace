@@ -29,6 +29,6 @@ artisan コマンドで、編集しやすいように、初期状態で`/vendor`
 # /vendor/laravel/framework/src/Illuminate/Pagination/resources/views から
 # /resources/views/vendor/patination にファイルをコピーする
 
-$ php artisan vendor:punlish --tag=laravel-pagination
+$ php artisan vendor:publish --tag=laravel-pagination
 ```
 `resources` 配下に出力されたファイルを編集することで、`links()` メソッドで出力される内容をカスタマイズできる
