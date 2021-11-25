@@ -4,8 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Owner;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
+/* トランザクションを行うために追加 */
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 class OwnersController extends Controller
 {
@@ -55,12 +61,31 @@ class OwnersController extends Controller
             'password' => 'required|string|confirmed|min:8',
         ]);
 
-        Owner::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        /* onwer のrコード追加時に、shop のレコードも一緒に追加する
+         * 複数のテーブルに変更を加える場合は、トランザクションを使って全体がきちんと実行されることを保障する
+         */
+        try{
+            DB::transaction(function () use($request) {
+                $owner = Owner::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ]);
 
+                Shop::create([
+                    'owner_id' => $owner->id,
+                    'name' => '店名を入力してください',
+                    'information' => '',
+                    'filename' => '',
+                    'is_selling' => true
+                ]);
+            }, 2); /* デッドロックの試行回数: 2 */
+        }catch(Throwable $e){
+            Log::error($e);
+            throw $e;
+        }
+
+        /* try-catch ブロックを抜けてくることができれば、レコードの追加は完了している */
         return redirect()
             ->route('admin.owners.index')
             ->with([
