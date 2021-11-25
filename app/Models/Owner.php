@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/* Shopモデルとのリレーションを設定するために読み込みしておく */
+use App\Models\Shop;
+
 /* 認証機能を使うため、親クラスはModelではなくAuthenticatableにする */
 // class Owner extends Model
 class Owner extends Authenticatable
@@ -25,6 +28,11 @@ class Owner extends Authenticatable
        'email',
        'password',
    ];
+
+   /* Shop モデルとの 1-1リレーションを記述(owner has one shop) */
+   public function shop(){
+       return ($this->hasOne(Shop::class));
+   }
 
    /* hidden: シリアル化のために非表示にする */
    /**
