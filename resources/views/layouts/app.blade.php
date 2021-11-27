@@ -19,11 +19,11 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
 
-            @if(auth('admin')) {{-- admin ユーザーの時、admin用のナビゲーションを読み込む --}}
+            @if(auth('admin')->user()) {{-- admin ユーザーの時、admin用のナビゲーションを読み込む --}}
                 @include('layouts.admin-navigation')
-            @elseif(auth('owners')) {{-- owner ユーザーの時 --}}
+            @elseif(auth('owners')->user()) {{-- owner ユーザーの時 --}}
                 @include('layouts.owner-navigation')
-            @elseif(auth('user')) {{-- user のとき --}}
+            @elseif(auth('user')->user()) {{-- user のとき --}}
                 @include('layouts.user-navigation')
             @endif
 
