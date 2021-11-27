@@ -13,13 +13,22 @@ use App\Http\Controllers\Owner\Auth\NewPasswordController;
 use App\Http\Controllers\Owner\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Owner\Auth\RegisteredUserController;
 use App\Http\Controllers\Owner\Auth\VerifyEmailController;
+use App\Http\Controllers\Owner\ShopController;
 use Illuminate\Support\Facades\Route;
 
-/* owner ガードで認証するべきものは、すべて'owner'のプレフィックスをつけておく */
 
 Route::get('/', function () {
     return view('owner.welcome');
 });
+
+Route::prefix('shops')->
+    middleware('auth:owners')->group(function(){
+        Route::get('index', [ShopController::class, 'index'])->name('shops.index'); /* 店舗のインデックス画面 */
+        Route::get('edit/{shop}', [ShopController::class, 'edit'])->name('shops.edit'); /* 店舗情報編集画面 */
+        Route::post('update/{shop}', [ShopController::class, 'update'])->name('shops.update'); /* 店舗情報の更新処理 */
+});
+
+/* owner ガードで認証するべきものは、すべて'owner'のプレフィックスをつけておく */
 
 Route::get('/dashboard', function () {
     return view('owner.dashboard');
