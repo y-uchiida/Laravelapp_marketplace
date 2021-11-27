@@ -7,11 +7,11 @@ use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-/* ファイル保存用のファサード Storage を読み込み */
-use Illuminate\Support\Facades\Storage;
+/* バリデーションロジックを切り離すため、UploadImageRequest を読み込み */
+use App\Http\Requests\UploadImageRequest;
 
-/* アップロードされたファイルを編集(リサイズ)するため、InterventionImage を利用する */
-use InterventionImage;
+/* 共通処理として分離したアップロード処理を含むサービスクラスを読み込み */
+use App\Services\ImageService;
 
 class ShopController extends Controller
 {
@@ -56,21 +56,15 @@ class ShopController extends Controller
     /* 店舗情報の更新処理
      * ここではshopの画像データを受け取る
      */
-    public function update(Request $request, $id)
+    public function update(UploadImageRequest $request, $id)
     {
         $imageFile = $request->file('image');
         if($imageFile !== null && $imageFile->isValid() ){
-            // Storage::putFile('public/shops', $imageFile); /* リサイズをせずに保存する場合の処 */
+            // Storage::putFile('public/shops', $imageFile); /* リサイズをせずに保存する場合の処理 */
 
-            /* InterventionImage を用いて画僧を 1920 * 1080 にリサイズする */
-            $fileName = uniqid(rand().'_'); /* 1. ファイル名が一意な値になるように設定 */
-            $extension = $imageFile->extension(); /* 拡張子を取得 */
-            $fileNameToStore = $fileName. '.' . $extension;
-            $resizedImage = InterventionImage::make($imageFile)->resize(1920, 1080)->encode();
-            Storage::put('public/shops/' . $fileNameToStore, $resizedImage );
+            $fileNameToStore = ImageService::upload($imageFile, 'shops');
         }
 
         return redirect()->route('owner.shops.index');
     }
-
 }

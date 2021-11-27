@@ -45,7 +45,7 @@ if ($request->hasfile('uploadImage') && $request->file('uploadImage')->isValid()
 Intervention Image を利用する
 1. composer でインストール
 ```
-composer require intervention/image
+$ composer require intervention/image
 ```
 
 2. InterventionImage をprovider に追加
@@ -78,6 +78,16 @@ app\config\app.php を編集
     ],
 ```
 
+3. InterventionImage の利用
+```
+/* InterventionImage::make() でオブジェクトを作り、 encode()で指定内容のファイルを作成  */
+$resizedImage = InterventionImage::make($imageFile)->resize(1920, 1080)->encode();
+
+/* Intervention Image で生成される画像オブジェクトはLaravel のuploadedFile オブジェクトとは別なので、
+ * 保存のメソッドもput() に変更する
+ */
+ Storage::put('public/' . 'filename_to_store.xxx', $resizedImage );
+```
 
 ## 参考
 - 正常なアップロードのバリデーション 8.x Laravel  
