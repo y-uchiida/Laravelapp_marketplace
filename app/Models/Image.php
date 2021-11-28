@@ -20,6 +20,6 @@ class Image extends Model
 
     public function owner()
     {
-        return $this->belogsTo(Owner::class);
+        return $this->belongsTo(Owner::class);
     }
 }

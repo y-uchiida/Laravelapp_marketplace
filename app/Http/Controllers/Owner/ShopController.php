@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadImageRequest;
 use App\Models\Shop;
 use App\Services\ImageService;
 
 /* バリデーションロジックを切り離すため、UploadImageRequest を読み込み */
+use App\Http\Requests\UploadImageRequest;
 
 /* 共通処理として分離したアップロード処理を含むサービスクラスを読み込み */
 use Illuminate\Support\Facades\Auth;

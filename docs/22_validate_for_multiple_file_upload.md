@@ -13,6 +13,21 @@ $request->file('files')[0]
 $request->file('files')[1]
 $request->file('files')[2]
 ```
+保存を行う場合、foreachなどで1要素ずつループで回して処理する
+```
+if(!is_null($files)){
+    foreach($files as $file){
+        $fileName = uniqid(rand() . '_'); /* 1. ファイル名が一意な値になるように設定 */
+        $extension = $file->extension(); /* 拡張子を取得 */
+        $fileNameToStore = $fileName . '.' . $extension;
+
+        Storage::putFileAs('path/to/dir/', $file, $fileNameToStore);
+        Image::create([
+            'filename' => $fileNameToStore
+        ]);
+    }
+```
+
 
 ## バリデーション条件の記述方法
 配列の番号になる部分を、`.*.` で区切って配列を表現する

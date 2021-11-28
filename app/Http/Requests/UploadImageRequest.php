@@ -27,11 +27,11 @@ class UploadImageRequest extends FormRequest
         /* コントローラのアクションで$request->validate() メソッドを行う際の引数と同様に、
          * バリデーションの条件を連想配列形式で記述する
          */
-        return [
+        return ([
             'image' => 'image|mimes:jpg,jpeg,png|max:2048',
             /* files のプリフィックス付きで入ってくる複数アップロードされたデータに対しても、同様のバリデーションをする */
             'files.*.image' => 'required|image|mimes:jpg,jpeg,png|max:2048'
-        ];
+        ]);
     }
 
     public function messages()
