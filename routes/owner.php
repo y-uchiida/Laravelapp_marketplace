@@ -14,6 +14,7 @@ use App\Http\Controllers\Owner\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Owner\Auth\RegisteredUserController;
 use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use App\Http\Controllers\Owner\ShopController;
+use App\Http\Controllers\Owner\ImageController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,6 +28,9 @@ Route::prefix('shops')->
         Route::get('edit/{shop}', [ShopController::class, 'edit'])->name('shops.edit'); /* 店舗情報編集画面 */
         Route::post('update/{shop}', [ShopController::class, 'update'])->name('shops.update'); /* 店舗情報の更新処理 */
 });
+
+/* ImageConterollerへのルーティング設定(リソースコントローラで制御) */
+Route::resource('images', ImageController::class)->middleware('auth:owners')->except(['show']);
 
 /* owner ガードで認証するべきものは、すべて'owner'のプレフィックスをつけておく */
 

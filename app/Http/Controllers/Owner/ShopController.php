@@ -57,6 +57,13 @@ class ShopController extends Controller
      */
     public function update(UploadImageRequest $request, $id)
     {
+        /* shops テーブルのカラムに対するバリデーション */
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'information' => 'required|string|max:1000',
+            'is_selling' => 'required',
+        ]);
+
         /* 店舗画像の保存処理 */
         $imageFile = $request->file('image');
         if ($imageFile !== null && $imageFile->isValid()) {
