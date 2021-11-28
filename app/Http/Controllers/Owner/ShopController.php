@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UploadImageRequest;
 use App\Models\Shop;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\ImageService;
 
 /* バリデーションロジックを切り離すため、UploadImageRequest を読み込み */
-use App\Http\Requests\UploadImageRequest;
 
 /* 共通処理として分離したアップロード処理を含むサービスクラスを読み込み */
-use App\Services\ImageService;
+use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
@@ -42,7 +41,7 @@ class ShopController extends Controller
     /* 店舗情報の表示 */
     public function index()
     {
-        $shops = Shop::where('owner_id', Auth::id() )->get();
+        $shops = Shop::where('owner_id', Auth::id())->get();
         return view('owner.shops.index', compact('shops'));
     }
 
@@ -58,13 +57,27 @@ class ShopController extends Controller
      */
     public function update(UploadImageRequest $request, $id)
     {
+        /* 店舗画像の保存処理 */
         $imageFile = $request->file('image');
-        if($imageFile !== null && $imageFile->isValid() ){
+        if ($imageFile !== null && $imageFile->isValid()) {
             // Storage::putFile('public/shops', $imageFile); /* リサイズをせずに保存する場合の処理 */
 
             $fileNameToStore = ImageService::upload($imageFile, 'shops');
         }
 
-        return redirect()->route('owner.shops.index');
+        /* 店舗情報の保存処理 */
+        $shop = Shop::findOrFail($id);
+        $shop->name = $request->name;
+        $shop->information = $request->information;
+        $shop->is_selling = $request->is_selling;
+        if (!is_null($imageFile) && $imageFile->isValid()) {
+            $shop->filename = $fileNameToStore;
+        }
+
+        $shop->save();
+
+        return redirect()
+            ->route('owner.shops.index')
+            ->with(['message' => '店舗情報を更新しました。', 'status' => 'info']);
     }
 }
