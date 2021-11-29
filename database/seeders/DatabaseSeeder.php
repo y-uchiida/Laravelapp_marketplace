@@ -16,7 +16,12 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call([
             AdminsTableSeeder::class,
-            OwnersTableSeeder::class
+            OwnersTableSeeder::class,
+            ShopsTableSeeder::class,
+            ImagesTableSeeder::class,
+            CategoriesTableSeeder::class,
+            // ProductsTableSeeder::class,
+            // StocksTableSeeder::class
         ]);
     }
 }
