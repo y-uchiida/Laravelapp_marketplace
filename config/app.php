@@ -235,6 +235,9 @@ return [
 
         /* アップロードされたファイルを編集するためのInterventionImageへのエイリアスを追加 */
         'InterventionImage' => Intervention\Image\Facades\Image::class,
+
+        /* 定数を設定したクラスへのエイリアスを追加 */
+        'Constant' => App\Constants\Common::class
     ],
 
 ];
