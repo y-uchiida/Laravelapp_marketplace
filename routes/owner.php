@@ -19,9 +19,9 @@ use App\Http\Controllers\Owner\ProductController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('owner.welcome');
-});
+// Route::get('/', function () {
+//     return view('owner.welcome');
+// });
 
 Route::prefix('shops')->
     middleware('auth:owners')->group(function(){
@@ -44,12 +44,12 @@ Route::get('/dashboard', function () {
     return view('owner.dashboard');
 })->middleware(['auth:owners'])->name('dashboard');
 
-Route::get('/register', [RegisteredUserController::class, 'create'])
-                ->middleware('guest')
-                ->name('register');
-
-Route::post('/register', [RegisteredUserController::class, 'store'])
-                ->middleware('guest');
+/* Admin 画面でオーナーの追加を行うので、新規登録画面は利用させない */
+// Route::get('/register', [RegisteredUserController::class, 'create'])
+//                 ->middleware('guest')
+//                 ->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store'])
+//                 ->middleware('guest');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
                 ->middleware('guest')
