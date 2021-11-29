@@ -9,6 +9,12 @@ class Stock extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'product_id',
+        'type',
+        'quantity'
+    ];
+
     /* Stockモデルで操作するテーブル名が`t_stocks` であり、
      * Laravelの命名規約外なので、明示的に設定する */
     protected $table = 't_stocks';

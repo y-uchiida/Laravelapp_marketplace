@@ -15,6 +15,20 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'shop_id',
+        'name',
+        'information',
+        'price',
+        'is_selling',
+        'sort_order',
+        'secondary_category_id',
+        'image1',
+        'image2',
+        'image3',
+        'image4',
+    ];
+
     public function shop()
     {
         return ($this->belongsTo(Shop::class));
@@ -30,6 +44,19 @@ class Product extends Model
     {
         /* 第1引数が連携先のモデルクラス、第2引数が外部キーカラム名、第3引数が連携先の主キーカラム名 */
         return ($this->belongsTo(Image::class, 'image1', 'id'));
+    }
+
+    public function imageSecond()
+    {
+        return ($this->belongsTo(Image::class, 'image2', 'id'));
+    }
+    public function imageThird()
+    {
+        return ($this->belongsTo(Image::class, 'image3', 'id'));
+    }
+    public function imageFourth()
+    {
+        return ($this->belongsTo(Image::class, 'image4', 'id'));
     }
 
     /* 在庫データモデル Stock とのリレーションを設定 */

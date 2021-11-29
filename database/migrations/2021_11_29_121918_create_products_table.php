@@ -35,8 +35,7 @@ class CreateProductsTable extends Migration
              * また、内容が入らない(画像を設定しない)場合があるので、nullable をつけておく
              */
             $table->foreignId('image1')
-                ->nullable()
-                ->constrained('images');
+                ->nullable()->constrained('images');
 
             $table->timestamps();
         });
