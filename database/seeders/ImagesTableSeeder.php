@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\DB;
 
 class ImagesTableSeeder extends Seeder
 {
@@ -13,6 +14,11 @@ class ImagesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('images')->insert([
+            ['owner_id' => 1, 'filename' => 'product_image_sample01.jpg', 'title' => null],
+            ['owner_id' => 1, 'filename' => 'product_image_sample02.jpg', 'title' => null],
+            ['owner_id' => 1, 'filename' => 'product_image_sample03.jpg', 'title' => null],
+            ['owner_id' => 1, 'filename' => 'product_image_sample04.jpg', 'title' => null],
+        ]);
     }
 }
