@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Owner;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /* Ownerモデルとのリレーションを設定するために読み込みしておく */
@@ -25,5 +26,10 @@ class Shop extends Model
     public function owner()
     {
         return ($this->belongsTo(Owner::class));
+    }
+
+    /* Product モデルとの 1-多リレーションを記述(Shop has many products) */
+    public function product(){
+        return ($this->hasMany(Product::class));
     }
 }

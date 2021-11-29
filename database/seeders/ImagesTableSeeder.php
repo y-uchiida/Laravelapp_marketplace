@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Database\DB;
+use Illuminate\Support\Facades\DB;
 
 class ImagesTableSeeder extends Seeder
 {
