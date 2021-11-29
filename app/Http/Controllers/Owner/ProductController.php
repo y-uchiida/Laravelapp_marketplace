@@ -110,7 +110,7 @@ class ProductController extends Controller
                 /* stock のレコードを作成 */
                 Stock::create([
                     'product_id' => $product->id,
-                    'type' => 1, /* 新規在庫なので、入庫扱い(1)とする */
+                    'type' => \Constant::STOCK_ADD, /* 新規在庫なので、入庫扱い(1)とする */
                     'quantity' => $request->quantity,
                 ]);
             });
@@ -194,7 +194,9 @@ class ProductController extends Controller
                     ]));
         }
 
-        /* データベース更新処理を実行 */
+        /* データベース更新処理を実行
+         * products テーブルと stock テーブルの2つのレコードを追加するので、トランザクションを利用する
+         */
         try {
             DB::transaction(function () use ($request, $product) {
 
@@ -210,8 +212,13 @@ class ProductController extends Controller
                 $product->image4 = $request->image4;
                 $product->is_selling = $request->is_selling;
 
+                /* まずproduct を保存する */
+                $product->save();
+
+                /* 入庫・出庫のどちらかによって、quantityの符号を設定 */
                 $newQuantity = $request->type === \Constant::STOCK_ADD ? $request->quantity : $request->quantity * -1;
 
+                /* Stock テーブルを更新 */
                 Stock::create([
                     'product_id' => $product->id,
                     'type' => $request->type,

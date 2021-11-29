@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-/* バリデーションロジックを切り離すため、UploadImageRequest を読み込み */
 use App\Models\Image;
+use App\Models\Product;
 
+/* バリデーションロジックを切り離すため、UploadImageRequest を読み込み */
 use App\Http\Requests\UploadImageRequest;
+
 
 /* 共通処理として分離したアップロード処理を含むサービスクラスを読み込み */
 use App\Services\ImageService;
@@ -152,6 +154,35 @@ class ImageController extends Controller
     public function destroy($id)
     {
         $image = Image::findOrFail($id);
+
+        /* ImageはProductに対して外部キー制約が設定されているので、
+         * 削除対象のimageが利用されているproducts テーブルを変更(nullに修正)する
+         */
+        $imageInProducts =
+            Product::where('image1', $image->id)
+                ->orWhere('image2', $image->id)
+                ->orWhere('image3', $image->id)
+                ->orWhere('image4', $image->id)
+                ->get();
+
+        /* レコードが取得できたら、削除対象の画像のid をnull に置き換える処理をeach() で順番に処理を行う */
+        if ($imageInProducts){
+            $imageInProducts->each(function($product) use($image){
+                if ($product->image1 === $image->id){
+                    $product->image1 = null;
+                }
+                if ($product->image2 === $image->id){
+                    $product->image2 = null;
+                }
+                if ($product->image3 === $image->id){
+                    $product->image3 = null;
+                }
+                if ($product->image4 === $image->id){
+                    $product->image4 = null;
+                }
+                $product->save();
+            });
+        }
 
         /* 対象のファイルが格納されているパスを取得 */
         $filePath = "public/products/{$image->filename}";
