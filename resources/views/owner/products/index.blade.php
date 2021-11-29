@@ -16,7 +16,6 @@
                     </div>
                     <div class="flex flex-wrap">
                         @foreach ($ownerInfo->shop->product as $product)
-                            @php dd($owner) @endphp
                             <div class="w-1/4 p-2 md:p-4">
                                 <a href="{{ route('owner.products.edit', ['product' => $product->id]) }}">
                                     <div class="border rounded-md p-2 md:p-4">
