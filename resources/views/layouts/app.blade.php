@@ -23,7 +23,7 @@
                 @include('layouts.admin-navigation')
             @elseif(auth('owners')->user()) {{-- owner ユーザーの時 --}}
                 @include('layouts.owner-navigation')
-            @elseif(auth('user')->user()) {{-- user のとき --}}
+            @elseif(auth('users')->user()) {{-- user のとき --}}
                 @include('layouts.user-navigation')
             @endif
 
