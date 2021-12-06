@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 /* コントローラーへの参照を追加 */
+use App\Http\Controllers\User\ItemController;
+
 use App\Http\Controllers\BladeComponentSampleController;
 use App\Http\Controllers\ServiceContainerTestController;
 use App\Http\Controllers\ServiceProviderSampleController;
@@ -24,9 +26,13 @@ Route::get('/', function () {
     return view('user.welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('user.dashboard');
-})->middleware(['auth:users'])->name('dashboard');
+Route::middleware('auth:users')->group(function(){
+    Route::get('/', [ItemController::class, 'index'])->name('items.index');
+});
+
+// Route::get('/dashboard', function () {
+//     return view('user.dashboard');
+// })->middleware(['auth:users'])->name('dashboard');
 
 /* Blade コンポーネントの動作テスト */
 Route::get('/sample-component1', [BladeComponentSampleController::class, 'showSampleComponent1']);
