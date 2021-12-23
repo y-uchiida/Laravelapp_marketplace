@@ -26,7 +26,6 @@ class CreateStocksTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-
             $table->timestamps();
         });
     }
