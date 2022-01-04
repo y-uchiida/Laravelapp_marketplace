@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Product;
+use App\Models\Stock;
 
 class ItemController extends Controller
 {
@@ -62,6 +63,13 @@ class ItemController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        return (view('user.show', compact('product')));
+        /* 現在の在庫数をstocks テーブルの該当レコードの合計値から取得する */
+        $quantity = Stock::where('product_id', $product->id)->sum('quantity');
+
+        if ($quantity > 9){
+            $quantity = 9;
+        }
+
+        return (view('user.show', compact('product', 'quantity')));
     }
 }
