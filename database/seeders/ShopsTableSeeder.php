@@ -23,7 +23,7 @@ class ShopsTableSeeder extends Seeder
                 'owner_id' => $i,
                 'name' => "shop_name{$i}",
                 'information' => 'infomation,infomation,infomation,infomation,infomation,infomation....',
-                'filename' => '',
+                'filename' => 'shopThumbnail'. ($i % 3 + 1) .'.jpg',
                 'is_selling' => true
             ];
         }
