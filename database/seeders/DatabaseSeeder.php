@@ -4,6 +4,10 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+/* モデル経由でFactoryを利用するため読み込みしておく */
+use App\Models\Product;
+use App\Models\Stock;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -24,5 +28,9 @@ class DatabaseSeeder extends Seeder
             ProductsTableSeeder::class,
             StocksTableSeeder::class
         ]);
+
+        /* ダミーデータの生成 */
+        Product::factory(100)->create();
+        Stock::factory(100)->create();
     }
 }

@@ -15,9 +15,9 @@ class AddProductsTableColumns extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->string('name');
-            $table->string('information');
-            $table->unsignedInteger('price');
-            $table->boolean('is_selling');
+            $table->string('information')->nullable();
+            $table->unsignedInteger('price')->default(100);
+            $table->boolean('is_selling')->default(true);
             $table->integer('sort_order')->nullable();
 
             /* imageの利用数も増やす */
