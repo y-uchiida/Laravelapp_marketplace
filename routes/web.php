@@ -8,6 +8,7 @@ use App\Http\Controllers\User\ItemController;
 use App\Http\Controllers\BladeComponentSampleController;
 use App\Http\Controllers\ServiceContainerTestController;
 use App\Http\Controllers\ServiceProviderSampleController;
+use App\Http\Controllers\User\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,16 @@ Route::get('/', function () {
 Route::middleware('auth:users')->group(function(){
     Route::get('/', [ItemController::class, 'index'])->name('items.index');
     Route::get('/show/{item}', [ItemController::class, 'show'])->name('items.show');
+});
+
+/* カート情報の操作に関するルーティング(CartController) */
+Route::prefix('cart')->middleware('auth:users')->group(function(){
+    /* カートの一覧表示 */
+    Route::get('index', [CartController::class, 'index'])->name('cart.index');
+    /* カートに追加する処理 */
+    Route::post('add', [CartController::class, 'add'])->name('cart.add');
+    /* カートの商品を削除する処理 */
+    Route::post('delete/{item}', [CartController::class, 'delete'])->name('cart.delete');
 });
 
 // Route::get('/dashboard', function () {

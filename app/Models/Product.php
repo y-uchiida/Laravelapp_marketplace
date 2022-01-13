@@ -10,6 +10,7 @@ use App\Models\Shop;
 use App\Models\SecondaryCategory;
 use App\Models\Image;
 use App\Models\Stock;
+use App\Models\User;
 
 class Product extends Model
 {
@@ -62,5 +63,14 @@ class Product extends Model
     /* 在庫データモデル Stock とのリレーションを設定 */
     public function stock(){
         return ($this->hasMany(Stock::class));
+    }
+
+    /* 利用者データモデル Users とのリレーションを設定
+     * 中間テーブル carts を通じて、各ユーザーがそれぞれの商品をいくつ購入しようとしているかを表現する
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'carts')
+        ->withPivot(['id', 'quantity']);
     }
 }
