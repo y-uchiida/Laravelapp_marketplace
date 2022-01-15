@@ -13,6 +13,22 @@ class ItemController extends Controller
     public function __construct()
     {
         $this->middleware('auth:users');
+
+        /* 販売中の商品かどうかを判定 */
+        $this->middleware(function($request, $next){
+            $item_id = $request->route()->parameter(item);
+
+            if (!is_null(item_id)){
+                /* availableItems() で注文可能な商品を絞り込み、その中にパスパラメータで指定された商品IDがあるか判定 */
+                $is_availableItem = Product::availableItems()->where('products.id', $item_id)->exists();
+                if (!$is_availableItem){
+                    /* 販売中の商品ではない場合、404 エラーを返す */
+                    abort(404);
+                }
+            }
+            /* 販売中の商品の場合、次のミドルウェアへ処理を渡す */
+            return $next($request);
+        });
     }
 
     public function index()
