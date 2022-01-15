@@ -8,6 +8,7 @@ use App\Http\Controllers\User\ItemController;
 use App\Http\Controllers\BladeComponentSampleController;
 use App\Http\Controllers\ServiceContainerTestController;
 use App\Http\Controllers\ServiceProviderSampleController;
+use App\Http\Controllers\User\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,22 @@ Route::get('/', function () {
 Route::middleware('auth:users')->group(function(){
     Route::get('/', [ItemController::class, 'index'])->name('items.index');
     Route::get('/show/{item}', [ItemController::class, 'show'])->name('items.show');
+});
+
+/* カート情報の操作に関するルーティング(CartController) */
+Route::prefix('cart')->middleware('auth:users')->group(function(){
+    /* カートの一覧表示 */
+    Route::get('index', [CartController::class, 'index'])->name('cart.index');
+    /* カートに追加する処理 */
+    Route::post('add', [CartController::class, 'add'])->name('cart.add');
+    /* カートの商品を削除する処理 */
+    Route::post('delete/{item}', [CartController::class, 'delete'])->name('cart.delete');
+    /* カート内の商品の決済を行う */
+    Route::get('checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    /* 決済処理成功後、カート内の商品を削除する */
+    Route::get('success', [CartController::class, 'success'])->name('cart.success');
+    /* 決済処理をキャンセルした場合の処理（在庫データから減少させた文の商品数量をもとに戻す） */
+    Route::get('cancel', [CartController::class, 'cancel'])->name('cart.cancel');
 });
 
 // Route::get('/dashboard', function () {
