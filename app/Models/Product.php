@@ -117,4 +117,32 @@ class Product extends Model
                 'secondary_categories.name as category', 'image1.filename as filename'
             );
     }
+
+    /*
+     * 商品一覧データの並び順を設定する
+     * 第2引数 sortOrder は、利用する並び順を示す文字列を受け取る
+     * 利用できる文字列は、Constants/common.php のSORT_ORDER 配列のvalue
+     */
+    public function scopeSortOrder($query, $sortOrder)
+    {
+        $order_type = \Constant::SORT_ORDER;
+
+        if ($sortOrder === $order_type[\Constant::ORDER_RECOMMEND]['value']) {
+            return $query->orderBy('sort_order', 'asc');
+        }
+        else if ($sortOrder === $order_type[\Constant::ORDER_HIGHER]['value']) {
+            return $query->orderBy('price', 'desc');
+        }
+        else if ($sortOrder === $order_type[\Constant::ORDER_LOWER]['value']) {
+            return $query->orderBy('price', 'asc');
+        }
+        else if ($sortOrder === $order_type[\Constant::ORDER_LATER]['value']) {
+            return $query->orderBy('products.created_at', 'desc');
+        }
+        else if ($sortOrder === $order_type[\Constant::ORDER_OLDER]['value']) {
+            return $query->orderBy('products.created_at', 'asc');
+        }
+
+        return $query->orderBy('sort_order', 'asc');
+    }
 }

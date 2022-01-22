@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Models\Stock;
@@ -16,9 +17,9 @@ class ItemController extends Controller
 
         /* 販売中の商品かどうかを判定 */
         $this->middleware(function($request, $next){
-            $item_id = $request->route()->parameter(item);
+            $item_id = $request->route()->parameter('item');
 
-            if (!is_null(item_id)){
+            if (!is_null($item_id)){
                 /* availableItems() で注文可能な商品を絞り込み、その中にパスパラメータで指定された商品IDがあるか判定 */
                 $is_availableItem = Product::availableItems()->where('products.id', $item_id)->exists();
                 if (!$is_availableItem){
@@ -31,10 +32,12 @@ class ItemController extends Controller
         });
     }
 
-    public function index()
+    public function index(Request $request)
     {
         /* Products モデルから、注文可能な商品のみを取り出す(ローカルスコープavailableItems() を利用) */
-        $products = Product::availableItems()->get();
+        $products = Product::availableItems()
+            ->sortOrder($request->sort)
+            ->get();
         return (view('user.index', compact('products')));
     }
 
