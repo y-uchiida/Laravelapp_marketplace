@@ -37,7 +37,7 @@ class ItemController extends Controller
         /* Products モデルから、注文可能な商品のみを取り出す(ローカルスコープavailableItems() を利用) */
         $products = Product::availableItems()
             ->sortOrder($request->sort)
-            ->get();
+            ->paginate($request->pagination); /* ページングを実装するため、get() ではなく paginate() を利用 */
         return (view('user.index', compact('products')));
     }
 

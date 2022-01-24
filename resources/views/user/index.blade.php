@@ -22,7 +22,26 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div>表示件数</div>
+                        <div>
+                            <span class="text-sm">表示件数</span><br>
+                            <select id="pagination" name="pagination">
+                                <option value="20"
+                                    @if(\Request::get('pagination') === '20')
+                                    selected
+                                    @endif>20件
+                                </option>
+                                <option value="50"
+                                    @if(\Request::get('pagination') === '50')
+                                    selected
+                                    @endif>50件
+                                </option>
+                                <option value="100"
+                                    @if(\Request::get('pagination') === '100')
+                                    selected
+                                    @endif>100件
+                                </option>
+                            </select>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -54,6 +73,14 @@
                             </div>
                         @endforeach
                     </div>
+                    {{-- ページングの切り替えUIを追加、links() だけで生成してくれる --}}
+                    {{
+                        $products->appends([
+                            /* appends に連想配列を渡すことで、生成されるページングURLにクエリストリング(Get パラメータ)を追加する */
+                            'sort' => \Request::get('sort'), /* 現在の並び順 */
+                            'pagination' => \Request::get('pagination'), /* 現在の1ページあたり商品数 */
+                        ])->links();
+                    }}
                 </div>
             </div>
         </div>
@@ -61,6 +88,12 @@
     <script>
         const select = document.getElementById('sort')
         select.addEventListener('change', function(){
+            this.form.submit()
+        })
+
+        /* ページング用のセレクトボックス切替時に再読み込み */
+        const paginate = document.getElementById('pagination')
+        paginate.addEventListener('change', function(){
             this.form.submit()
         })
     </script>
