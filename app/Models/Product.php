@@ -145,4 +145,16 @@ class Product extends Model
 
         return $query->orderBy('sort_order', 'asc');
     }
+
+    /*
+     * 商品一覧から、選択したカテゴリIDの商品のみを絞り込みする
+     */
+    public function scopeSelectCategory($query, $categoryId)
+    {
+        if ($categoryId !== '0')
+        {
+            return $query->where('secondary_category_id', $categoryId);
+        }
+        return ;
+    }
 }
