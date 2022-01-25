@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Models\Stock;
+use App\Models\PrimaryCategory; /* 検索絞り込みのスコープ用に読み込み */
 
 class ItemController extends Controller
 {
@@ -34,11 +35,14 @@ class ItemController extends Controller
 
     public function index(Request $request)
     {
-        /* Products モデルから、注文可能な商品のみを取り出す(ローカルスコープavailableItems() を利用) */
-        $products = Product::availableItems()
+        /* 検索フォームで選択されたカテゴリに絞り込みするため、カテゴリ一覧を取得 */
+        $categories = PrimaryCategory::with('secondary')->get();
+
+        $products = Product::availableItems() /* Products モデルから、注文可能な商品のみを取り出す(ローカルスコープavailableItems() を利用) */
+            ->selectCategory($request->category ?? '0') /* 選択したカテゴリの商品のみを取り出す(ローカルスコープselectCategory() を利用) */
             ->sortOrder($request->sort)
             ->paginate($request->pagination ?? '20'); /* ページングを実装するため、get() ではなく paginate() を利用 (件数指定がない場合は、null合体演算子を用いて20にする) */
-        return (view('user.index', compact('products')));
+        return (view('user.index', compact('products', 'categories')));
     }
 
     public function show($id)
@@ -53,4 +57,5 @@ class ItemController extends Controller
         }
         return (view('user.show', compact('product', 'quantity')));
     }
+
 }
