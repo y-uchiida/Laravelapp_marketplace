@@ -21,7 +21,13 @@
                         @endforeach
                     </select>
                     <div class="flex space-x-2 items-center">
-                        <div><input name="keyword" class="border border-gray-500 py-2" placeholder="キーワードを入力"></div>
+                        <div>
+                            <input name="keyword" class="border border-gray-500 py-2" placeholder="キーワードを入力"
+                                    @if(!is_null(\Request::get('keyword')))
+                                    value="{{ \Request::get('keyword') }}"
+                                    @endif
+                            >
+                        </div>
                         <div><button
                                 class="ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">検索する</button>
                         </div>
@@ -92,6 +98,7 @@
                     {{ $products->appends([
                             /* appends に連想配列を渡すことで、生成されるページングURLにクエリストリング(Get パラメータ)を追加する */
                             'sort' => \Request::get('sort') /* 現在の並び順 */,
+                            'keyword' => \Request::get('keyword') /* 現在の並び順 */,
                             'pagination' => \Request::get('pagination') /* 現在の1ページあたり商品数 */,
                         ])->links() }}
                 </div>
