@@ -40,6 +40,7 @@ class ItemController extends Controller
 
         $products = Product::availableItems() /* Products モデルから、注文可能な商品のみを取り出す(ローカルスコープavailableItems() を利用) */
             ->selectCategory($request->category ?? '0') /* 選択したカテゴリの商品のみを取り出す(ローカルスコープselectCategory() を利用) */
+            ->searchKeyword($request->keyword) /* 入力シアキーワードに合致する名称の商品のみを取り出す(ローカルスコープsearchKeyword() を利用) */
             ->sortOrder($request->sort)
             ->paginate($request->pagination ?? '20'); /* ページングを実装するため、get() ではなく paginate() を利用 (件数指定がない場合は、null合体演算子を用いて20にする) */
         return (view('user.index', compact('products', 'categories')));

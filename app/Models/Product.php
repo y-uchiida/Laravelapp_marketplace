@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Image;
+use App\Models\SecondaryCategory;
+use App\Models\Shop;
+
+/* リレーションさせるモデルを読み込み */
+use App\Models\Stock;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
-/* リレーションさせるモデルを読み込み */
-use App\Models\Shop;
-use App\Models\SecondaryCategory;
-use App\Models\Image;
-use App\Models\Stock;
-use App\Models\User;
 
 class Product extends Model
 {
@@ -62,7 +62,8 @@ class Product extends Model
     }
 
     /* 在庫データモデル Stock とのリレーションを設定 */
-    public function stock(){
+    public function stock()
+    {
         return ($this->hasMany(Stock::class));
     }
 
@@ -72,7 +73,7 @@ class Product extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'carts')
-        ->withPivot(['id', 'quantity']);
+            ->withPivot(['id', 'quantity']);
     }
 
     /*  */
@@ -129,17 +130,13 @@ class Product extends Model
 
         if ($sortOrder === $order_type[\Constant::ORDER_RECOMMEND]['value']) {
             return $query->orderBy('sort_order', 'asc');
-        }
-        else if ($sortOrder === $order_type[\Constant::ORDER_HIGHER]['value']) {
+        } else if ($sortOrder === $order_type[\Constant::ORDER_HIGHER]['value']) {
             return $query->orderBy('price', 'desc');
-        }
-        else if ($sortOrder === $order_type[\Constant::ORDER_LOWER]['value']) {
+        } else if ($sortOrder === $order_type[\Constant::ORDER_LOWER]['value']) {
             return $query->orderBy('price', 'asc');
-        }
-        else if ($sortOrder === $order_type[\Constant::ORDER_LATER]['value']) {
+        } else if ($sortOrder === $order_type[\Constant::ORDER_LATER]['value']) {
             return $query->orderBy('products.created_at', 'desc');
-        }
-        else if ($sortOrder === $order_type[\Constant::ORDER_OLDER]['value']) {
+        } else if ($sortOrder === $order_type[\Constant::ORDER_OLDER]['value']) {
             return $query->orderBy('products.created_at', 'asc');
         }
 
@@ -151,10 +148,26 @@ class Product extends Model
      */
     public function scopeSelectCategory($query, $categoryId)
     {
-        if ($categoryId !== '0')
-        {
+        if ($categoryId !== '0') {
             return $query->where('secondary_category_id', $categoryId);
         }
-        return ;
+        return;
+    }
+
+    /*
+     * 商品一覧から、指定したキーワードを含む標品のみを絞り込みする
+     */
+    public function scopeSearchKeyword($query, $keyword)
+    {
+        if (!is_null($keyword)) {
+            $spaceConvert = mb_convert_kana($keyword, 's'); /* 全角スペースを半角に変換 */
+            $keywords = preg_split('/[\s]+/', $spaceConvert, -1, PREG_SPLIT_NO_EMPTY); /* 文字列を半角スペースで配列に分割 */
+            foreach ($keywords as $keyword) {
+                $query->where('products.name', 'LIKE', "%$keyword%"); /* 部分一致をさせるために% %で検索キーワードを囲む */
+            }
+            return $query;
+        } else {
+            return ;
+        }
     }
 }
