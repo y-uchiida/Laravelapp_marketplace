@@ -8,6 +8,7 @@ use App\Http\Controllers\User\ItemController;
 use App\Http\Controllers\BladeComponentSampleController;
 use App\Http\Controllers\ServiceContainerTestController;
 use App\Http\Controllers\ServiceProviderSampleController;
+use App\Http\Controllers\SendTestMailController;
 use App\Http\Controllers\User\CartController;
 
 /*
@@ -63,5 +64,8 @@ Route::get('/DI_test', [ServiceContainerTestController::class, 'DI_test']);
 /* サービスプロバイダの動作テスト */
 Route::get('ServiceProviderSample', [ServiceProviderSampleController::class, 'ServiceProviderSample']);
 Route::get('add_serviceProviderSample', [ServiceProviderSampleController::class, 'add_serviceProviderSample']);
+
+/* メール送信の動作テスト */
+Route::get('/send_test_mail', [SendTestMailController::class, 'index']);
 
 require __DIR__.'/auth.php';
