@@ -66,6 +66,7 @@ Route::get('ServiceProviderSample', [ServiceProviderSampleController::class, 'Se
 Route::get('add_serviceProviderSample', [ServiceProviderSampleController::class, 'add_serviceProviderSample']);
 
 /* メール送信の動作テスト */
-Route::get('/send_test_mail', [SendTestMailController::class, 'index']);
+Route::get('/send_test_mail_sync', [SendTestMailController::class, 'send_test_mail_sync']);
+Route::get('/send_test_mail_async', [SendTestMailController::class, 'send_test_mail_async']);
 
 require __DIR__.'/auth.php';
