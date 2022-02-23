@@ -15,6 +15,8 @@ use App\Models\Cart;
 /* ログインしているユーザーの情報を取得するため、Auth ファサードを読み込み */
 use Illuminate\Support\Facades\Auth;
 
+/* CartService に切り分けた処理を使うため、クラスを読み込み */
+use App\Services\CartService;
 
 class CartController extends Controller
 {
