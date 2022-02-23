@@ -104,7 +104,7 @@ class CartController extends Controller
         foreach($products as $product){
             Stock::create([
                 'product_id' => $product->id,
-                'type' => \Constant::PRODUCT_LIST['reduce'],
+                'type' => \Constant::STOCK_REDUCE,
                 'quantity' => $product->pivot->quantity * -1
             ]);
         }
@@ -146,7 +146,7 @@ class CartController extends Controller
         foreach($user->products as $product){
             Stock::create([
                 'product_id' => $product->id,
-                'type' => \Constant::PRODUCT_LIST['add'],
+                'type' => \Constant::STOCK_ADD,
                 'quantity' => $product->pivot->quantity
             ]);
         }
