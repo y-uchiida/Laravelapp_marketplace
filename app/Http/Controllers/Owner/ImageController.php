@@ -78,7 +78,6 @@ class ImageController extends Controller
      */
     public function store(UploadImageRequest $request)
     {
-        dd($request->file('files'));
         /* 複数の画像がアップロードされてくるので、foreachで配列要素ごとに保存処理をする */
         $imageFiles = $request->file('files');
         if(!is_null($imageFiles)){

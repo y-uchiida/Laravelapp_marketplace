@@ -15,6 +15,13 @@ use App\Models\Cart;
 /* ログインしているユーザーの情報を取得するため、Auth ファサードを読み込み */
 use Illuminate\Support\Facades\Auth;
 
+/* CartService に切り分けた処理を使うため、クラスを読み込み */
+use App\Services\CartService;
+
+/* 購入確認メールの送信ジョブを読み込み */
+use App\Jobs\SendThanksMailJob;
+/* 出品者（オーナー）への販売通知メールの送信ジョブを読み込み */
+use App\Jobs\SendOrderedMailJob;
 
 class CartController extends Controller
 {
@@ -132,6 +139,20 @@ class CartController extends Controller
     /* 決済処理が成功したら、カート内を空にする */
     public function success()
     {
+        $user = User::findOrFail(Auth::id());
+
+        /* カートに入っている商品を取得し、CartServiceでデータを整形する */
+        $items = Cart::where('user_id', Auth::id())->get();
+        $cartItems = CartService::getItemsInCart($items);
+
+        SendThanksMailJob::dispatch($cartItems, $user);
+
+        /* 購入された商品それぞれのオーナーに、販売通知メールを送信 */
+        foreach($cartItems as $item)
+        {
+            SendOrderedMailJob::dispatch($item, $user);
+        }
+
         Cart::where('user_id', Auth::id())->delete();
 
         return redirect()->route('user.items.index');
