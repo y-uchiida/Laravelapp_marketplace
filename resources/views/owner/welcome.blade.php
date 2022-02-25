@@ -25,7 +25,7 @@
             @if (Route::has('owner.login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth('owners') {{-- owners ガードで認証する用に設定 --}}
-                        <a href="{{ url('/owener/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
+                        <a href="{{ url('/owner/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
                     @else
                         <a href="{{ route('owner.login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 

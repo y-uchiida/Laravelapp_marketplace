@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Models\Product;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -41,4 +43,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /* 商品データモデル Products とのリレーションを設定
+     * 中間テーブル cart を通じて、各ユーザーがそれぞれの商品をいくつ購入しようとしているかを表現する
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'carts')
+        ->withPivot(['id', 'quantity']);
+    }
 }
