@@ -48,7 +48,6 @@ class CartService
             /* 結合した商品データを、返り値用の配列に追加 */
             array_push($products, $result);
         }
-        dd($products);
         return $products;
 
     }
